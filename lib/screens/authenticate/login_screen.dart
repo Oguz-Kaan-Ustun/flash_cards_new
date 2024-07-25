@@ -74,12 +74,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       showSpinner = true;
                     });
                     dynamic result = await _authService.signInWithEmailAndPassword(email, password);
+                    print('onPressed function: $result');
                     if(result == null) {
                       setState(() {
+                        showSpinner = false;
                         error = 'Could not sign in with those credentials';
                       });
+                    } else {
+                      Navigator.pop(context);
                     }
                   },
+                ),
+                SizedBox(height: 12.0),
+                Text(
+                  error,
+                  style: TextStyle(color: Colors.red, fontSize: 14.0),
                 ),
               ],
             ),

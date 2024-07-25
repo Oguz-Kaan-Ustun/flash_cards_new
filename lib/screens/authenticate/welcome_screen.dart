@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flash_cards_new/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
@@ -50,18 +52,25 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Hero(
                   tag: 'logo',
                   child: Container(
-                    child: Image.asset('images/logo.png'),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                            'images/logo.png'),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
                     height: controller.value*70,
                   ),
                 ),
                 AnimatedTextKit(
                   animatedTexts: [
                     TypewriterAnimatedText(
-                      'Flash Chat',
+                      'Flash Cards',
                       textStyle: TextStyle(
                         fontSize: 45.0,
                         fontWeight: FontWeight.w900,
@@ -100,7 +109,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             ),
             RoundedButton(
               title: 'Sign In Anon',
-              colour: Colors.blueAccent,
+              colour: Colors.blueAccent.shade700,
               onPressed: () async {
                 dynamic result = await _authService.signInAnon();
                 if (result == null) {

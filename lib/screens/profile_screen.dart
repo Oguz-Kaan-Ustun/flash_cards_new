@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/images/desk_background.jpg'),
+            image: AssetImage('images/desk_background.jpg'),
             fit: BoxFit.cover,
           ),
         ),

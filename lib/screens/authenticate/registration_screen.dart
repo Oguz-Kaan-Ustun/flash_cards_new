@@ -77,10 +77,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     dynamic result = await _authService.registerWithEmailAndPassword(email, password);
                     if(result == null) {
                       setState(() {
+                        showSpinner = false;
                         error = 'Please supply a valid email';
                       });
+                    } else {
+                      Navigator.pop(context);
                     }
                   },
+                ),
+                SizedBox(height: 12.0),
+                Text(
+                  error,
+                  style: TextStyle(color: Colors.red, fontSize: 14.0),
                 ),
               ],
             ),
