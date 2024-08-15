@@ -1,21 +1,27 @@
+import 'package:flash_cards_new/data/firestore_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_cards_new/models/flash_card_model.dart';
 import 'package:provider/provider.dart';
-import '../data/database.dart';
+import '../../data/database.dart';
 
 class AddFlashCardScreen extends StatefulWidget {
-  AddFlashCardScreen(
-      {required this.listName,
-      this.question,
-      this.answer,
-      required this.isNewCard,
-      this.indexOfCard});
+  AddFlashCardScreen({
+    required this.listName,
+    this.question,
+    this.answer,
+    required this.isNewCard,
+    this.indexOfCard,
+    required this.existingCards,
+    required this.docId,
+  });
 
   String listName;
   String? question;
   String? answer;
   bool isNewCard;
   int? indexOfCard;
+  List existingCards;
+  String docId;
 
   @override
   State<AddFlashCardScreen> createState() => _AddFlashCardScreenState();
@@ -24,6 +30,8 @@ class AddFlashCardScreen extends StatefulWidget {
 class _AddFlashCardScreenState extends State<AddFlashCardScreen> {
   FlashModel flashModel =
       FlashModel(back: 'Enter answer', front: 'Enter question', isKnown: false);
+
+  FirestoreDatabase _firestoreDatabase = FirestoreDatabase();
 
   @override
   void initState() {
@@ -78,11 +86,19 @@ class _AddFlashCardScreenState extends State<AddFlashCardScreen> {
                 if (flashModel.front != 'Enter question' &&
                     flashModel.back != 'Enter answer') {
                   if (widget.isNewCard) {
-                    provider.addFlashCard(widget.listName, flashModel);
+                    widget.existingCards.add({
+                      'Answer': flashModel.back,
+                      'Question': flashModel.front
+                    });
+                    _firestoreDatabase.addFlashCard(
+                        widget.existingCards, widget.listName, widget.docId);
                     Navigator.pop(context);
                   } else if (widget.indexOfCard != null) {
-                    provider.updateCardContents(
-                        widget.indexOfCard as int, widget.listName, flashModel);
+                    _firestoreDatabase.updateFlashCard(widget.docId,
+                        widget.existingCards, widget.indexOfCard!, {
+                      'Answer': flashModel.back,
+                      'Question': flashModel.front
+                    });
                     Navigator.pop(context);
                   }
                 } else {

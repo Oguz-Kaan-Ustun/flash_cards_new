@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_cards_new/data/firestore_database.dart';
+import 'package:flash_cards_new/screens/authenticate/registration_screen.dart';
 
 class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirestoreDatabase _firestoreDatabase = FirestoreDatabase();
 
   // auth change user stream
   Stream<User?> get authStateChanges {
@@ -34,10 +37,11 @@ class AuthService {
   }
 
 // register with email and password
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithEmailAndPassword(String email, String password, String nickName, UserRoles role) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
+      _firestoreDatabase.addUser(nickName, user!.uid, email, role);
       return user;
     } catch (error) {
       print(error.toString());

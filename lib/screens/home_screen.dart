@@ -1,9 +1,10 @@
-import 'package:flash_cards_new/data/database.dart';
-import 'package:flash_cards_new/models/folder_model.dart';
+import 'package:flash_cards_new/data/firestore_database.dart';
 import 'package:flash_cards_new/widgets/folder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flash_cards_new/models/folder_model.dart';
+import 'package:flash_cards_new/data/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -16,19 +17,32 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final provider = Provider.of<CardsDataBase>(context);
+    final FirestoreDatabase _firestoreDatabase = FirestoreDatabase();
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Test'),
+        title: Text('Shop'),
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: ListView(
-            children: provider.myBox.keys.toList().map((e) =>
-                FolderWidget(folderModel: FolderModel(name: e))).toList()
-        ),
+        child: StreamBuilder(
+            stream: _firestoreDatabase.getFolders(),
+            builder: (context, snapshot) {
+              List folders = snapshot.data?.docs ?? [];
+              if (folders.isEmpty) {
+                return const Center(
+                  child: Text("Add a folder!"),
+                );
+              }
+              return ListView(
+                  children: folders
+                      .map((e) => FolderWidget(
+                          folderName: e.data().name,
+                          docId: e.id,
+                          cardsList: e.data().contents))
+                      .toList());
+            }),
       ),
     );
   }

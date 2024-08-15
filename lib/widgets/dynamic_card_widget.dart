@@ -6,11 +6,21 @@ import '../utilities/small_page_painter.dart';
 import 'package:popover/popover.dart';
 
 class DynamicCardWidget extends StatelessWidget {
-  DynamicCardWidget({required this.flashModel, required this.listName, required this.indexOfCard, required this.isDoubled});
+  DynamicCardWidget({
+    required this.flashModel,
+    required this.listName,
+    required this.indexOfCard,
+    required this.isDoubled,
+    required this.docId,
+    required this.existingCards,
+  });
+
   final String listName;
   final int indexOfCard;
   final FlashModel flashModel;
   final bool isDoubled;
+  final String docId;
+  final  List existingCards;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +41,8 @@ class DynamicCardWidget extends StatelessWidget {
                       bodyBuilder: (context) => PopupItemsEditCard(
                         listName: listName,
                         indexOfCard: indexOfCard,
+                        docId: docId,
+                        existingCards: existingCards,
                       ),
                       height: 115,
                       width: 250,

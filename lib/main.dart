@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flash_cards_new/data/database.dart';
+import 'package:flash_cards_new/data/firestore_database.dart';
 import 'package:flash_cards_new/models/flash_card_model.dart';
 import 'package:flash_cards_new/screens/Wrapper.dart';
 import 'package:flash_cards_new/screens/folder_main_screen.dart';
@@ -46,6 +48,7 @@ class FlashCards extends StatelessWidget {
         ChangeNotifierProvider(
            create: (context) => CardsDataBase(),
         ),
+
       ],
       child: StreamProvider<User?>.value(
         initialData: null,

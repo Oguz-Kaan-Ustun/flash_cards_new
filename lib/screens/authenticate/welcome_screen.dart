@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flash_cards_new/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
@@ -18,7 +16,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation animation;
-
   final AuthService _authService = AuthService();
 
   @override
@@ -57,13 +54,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Hero(
                   tag: 'logo',
                   child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                            'images/logo.png'),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
+                    child: Image.asset('images/logo.png'),
                     height: controller.value*70,
                   ),
                 ),

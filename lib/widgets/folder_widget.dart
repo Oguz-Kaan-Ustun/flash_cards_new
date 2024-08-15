@@ -5,9 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:flash_cards_new/screens/folder_main_screen.dart';
 
 class FolderWidget extends StatelessWidget {
-  FolderWidget({required this.folderModel});
+  FolderWidget({required this.folderName, required this.docId, required this.cardsList});
 
-  final FolderModel folderModel;
+  final String folderName;
+  final String docId;
+  final List cardsList;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +27,10 @@ class FolderWidget extends StatelessWidget {
                   iconColor: WidgetStateProperty.all(Colors.black),
                 ),
                 onPressed: () {
-                  Provider.of<CardProvider>(context, listen: false)
-                      .giveListName(folderModel.name);
                   Navigator.pushNamed(
                     context,
                     FolderMainScreen.id,
-                    arguments: ScreenArguments(folderName: folderModel.name)
+                    arguments: ScreenArguments(docId: docId)
                   );
                 },
                 child: Container(
@@ -41,7 +41,7 @@ class FolderWidget extends StatelessWidget {
                       Icon(Icons.filter_none),
                       SizedBox(width: 15),
                       Text(
-                        folderModel.name,
+                        folderName,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

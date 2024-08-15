@@ -1,18 +1,18 @@
-import 'package:flash_cards_new/models/flash_card_model.dart';
+import 'package:flash_cards_new/data/firestore_database.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../data/database.dart';
-import '../screens/add_flash_card_screen.dart';
+import '../screens/bottom_and_pop_up/add_flash_card_screen.dart';
 
 class PopupItemsEditCard extends StatelessWidget {
-  PopupItemsEditCard({required this.listName, required this.indexOfCard});
+  PopupItemsEditCard({required this.listName, required this.indexOfCard, required this.docId, required this.existingCards});
   final String listName;
   final int indexOfCard;
+  final String docId;
+  final List existingCards;
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CardsDataBase>(context);
-    FlashModel flashModel = provider.loadData(listName)[indexOfCard];
+
+    FirestoreDatabase _firestoreDatabase = FirestoreDatabase();
 
     return Column(
       children: [
@@ -22,7 +22,7 @@ class PopupItemsEditCard extends StatelessWidget {
           tileColor: Colors.lightBlue[100],
           onTap: () {
             Navigator.pop(context);
-            provider.deleteFlashCard(listName, indexOfCard);
+            _firestoreDatabase.deleteFlashCard(docId, existingCards, indexOfCard);
           },
         ),
         ListTile(
@@ -45,10 +45,12 @@ class PopupItemsEditCard extends StatelessWidget {
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: AddFlashCardScreen(
+                    existingCards: existingCards,
+                    docId: docId,
                     listName: listName,
                     isNewCard: false,
-                    question: flashModel.front,
-                    answer: flashModel.back,
+                    question: existingCards[indexOfCard]['Question'],
+                    answer: existingCards[indexOfCard]['Answer'],
                     indexOfCard: indexOfCard,
                   ),
                 ),
