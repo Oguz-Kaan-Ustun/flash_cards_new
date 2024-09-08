@@ -4,6 +4,7 @@ part of 'flash_card_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
+//
 // **************************************************************************
 
 class FlashModelAdapter extends TypeAdapter<FlashModel> {
