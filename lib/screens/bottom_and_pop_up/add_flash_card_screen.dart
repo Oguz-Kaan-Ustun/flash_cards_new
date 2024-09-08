@@ -13,6 +13,7 @@ class AddFlashCardScreen extends StatefulWidget {
     this.indexOfCard,
     required this.existingCards,
     required this.docId,
+    required this.ownerId,
   });
 
   String listName;
@@ -22,6 +23,7 @@ class AddFlashCardScreen extends StatefulWidget {
   int? indexOfCard;
   List existingCards;
   String docId;
+  String ownerId;
 
   @override
   State<AddFlashCardScreen> createState() => _AddFlashCardScreenState();
@@ -91,7 +93,7 @@ class _AddFlashCardScreenState extends State<AddFlashCardScreen> {
                       'Question': flashModel.front
                     });
                     _firestoreDatabase.addFlashCard(
-                        widget.existingCards, widget.listName, widget.docId);
+                        widget.existingCards, widget.listName, widget.docId, widget.ownerId);
                     Navigator.pop(context);
                   } else if (widget.indexOfCard != null) {
                     _firestoreDatabase.updateFlashCard(widget.docId,

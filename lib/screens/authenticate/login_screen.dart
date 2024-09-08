@@ -74,7 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       showSpinner = true;
                     });
                     dynamic result = await _authService.signInWithEmailAndPassword(email, password);
-                    print('onPressed function: $result');
                     if(result == null) {
                       setState(() {
                         showSpinner = false;

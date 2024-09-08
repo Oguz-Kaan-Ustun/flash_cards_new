@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppConstants{
-  static const flashCardBoxName="newbox5";
-
+  static const String kBoxPreferenceKey = 'flashCardBoxName';
   static const kTextFieldDecoration = InputDecoration(
     hintText: 'Enter a value',
     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),

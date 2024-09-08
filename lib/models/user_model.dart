@@ -1,5 +1,3 @@
-
-
 class UserModel {
   String nickName;
   String userId;
@@ -16,9 +14,9 @@ class UserModel {
 
   UserModel.fromJson(Map<String, Object?> json)
       : this(
-    nickName: json['name']! as String,
-    userId: json['contents']! as String,
-    email: json['name']! as String,
+    nickName: json['nickName']! as String,
+    userId: json['userId']! as String,
+    email: json['email']! as String,
     role: json['role']! as String
   );
 

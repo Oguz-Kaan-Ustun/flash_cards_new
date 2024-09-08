@@ -1,17 +1,24 @@
+import 'package:flash_cards_new/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import '../services/auth_service.dart';
 
 class ProfileScreen extends StatelessWidget {
+  ProfileScreen({required this.userModel});
+  UserModel userModel;
+
   static const String id = 'profile_screen';
   final AuthService _auth = AuthService();
 
-  final String nickname = "JohnDoe";
-  final String email = "john.doe@example.com";
-  final String role = "Admin";
-
   @override
   Widget build(BuildContext context) {
+
+    final String nickName = userModel.nickName;
+    final String email = userModel.email;
+    final String role = userModel.role;
+
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text(
           'Profile',
@@ -42,7 +49,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              nickname,
+              nickName,
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 16),

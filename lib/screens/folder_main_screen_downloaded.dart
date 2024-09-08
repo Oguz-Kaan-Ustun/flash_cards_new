@@ -1,59 +1,56 @@
-import 'package:flash_cards_new/data/firestore_database.dart';
+import 'package:flash_cards_new/data/database.dart';
 import 'package:flash_cards_new/models/flash_card_model.dart';
 import 'package:flash_cards_new/screens/flash_card_learning_screen.dart';
 import 'package:flash_cards_new/widgets/dynamic_card_widget.dart';
+import 'package:flash_cards_new/widgets/folder_widget.dart';
 import 'package:flash_cards_new/widgets/popup_items_quiz_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../providers/card_provider.dart';
-import 'bottom_and_pop_up/add_flash_card_screen.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 final myIcon = Icon(Symbols.add_task);
 final myRoundedIcon = Icon(Symbols.add_task_rounded);
 final mySharpIcon = Icon(Symbols.add_task_sharp);
 
-class ScreenArguments {
-  ScreenArguments({required this.docId});
-  String docId;
+class ScreenArgumentsDownloaded {
+  ScreenArgumentsDownloaded({required this.folderName, required this.folderContent});
+  String folderName;
+  List folderContent;
 }
 
-class FolderMainScreen extends StatefulWidget {
-  static const String id = 'folder_main_screen';
+class FolderMainScreenDownloaded extends StatefulWidget {
+  static const String id = 'folder_main_screen_downloaded';
 
   @override
-  State<FolderMainScreen> createState() => _FolderMainScreenState();
+  State<FolderMainScreenDownloaded> createState() => _FolderMainScreenDownloadedState();
 }
 
-class _FolderMainScreenState extends State<FolderMainScreen> {
+class _FolderMainScreenDownloadedState extends State<FolderMainScreenDownloaded> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    final args = ModalRoute.of(context)!.settings.arguments as ScreenArgumentsDownloaded;
 
-    FirestoreDatabase _firestoreDatabase = FirestoreDatabase();
-
-    return StreamBuilder(
-      stream: _firestoreDatabase.getCards(args.docId),
-      builder: (context, AsyncSnapshot snapshot) {
-        var firestoreData = snapshot.data?.data();
-        if (firestoreData == null) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        String folderName = firestoreData.name;
-        List cardsList = firestoreData.contents;
-        print(cardsList);
-        return Scaffold(
+    return Scaffold(
           backgroundColor: Colors.grey[200],
           appBar: AppBar(
             title: Text(
-              '${folderName}',
+              '${args.folderName}',
             ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: (){
+                  Provider.of<CardsDataBase>(context, listen: false).deleteFolder(args.folderName);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
           ),
-          body: ListView(children: [
+          body: ListView(
+              children: [
             Padding(
               padding: EdgeInsets.all(20),
               child: Column(
@@ -67,7 +64,7 @@ class _FolderMainScreenState extends State<FolderMainScreen> {
                     ),
                     onPressed: () {
                       Provider.of<CardProvider>(context, listen: false)
-                          .giveListName(folderName);
+                          .giveListName(args.folderName);
                       Navigator.pushNamed(
                         context,
                         FlashCardLearningScreen.id,
@@ -117,7 +114,7 @@ class _FolderMainScreenState extends State<FolderMainScreen> {
                             padding: EdgeInsets.only(
                                 bottom: MediaQuery.of(context).viewInsets.bottom),
                             child: PopupItemsQuizScreen(
-                              folderName: folderName,
+                              folderName: args.folderName,
                             ),
                           ),
                         ),
@@ -142,53 +139,6 @@ class _FolderMainScreenState extends State<FolderMainScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all(Colors.lightBlue[50]),
-                      iconColor: WidgetStateProperty.all(Colors.black),
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        showDragHandle: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20.0),
-                          ),
-                        ),
-                        backgroundColor: Colors.white,
-                        context: context,
-                        builder: (context) => SingleChildScrollView(
-                          child: Container(
-                            padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).viewInsets.bottom),
-                            child: AddFlashCardScreen(
-                                listName: folderName, isNewCard: true, existingCards: cardsList, docId: args.docId),
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      height: 60,
-                      child: Row(
-                        children: [
-                          Icon(Icons.add, size: 35),
-                          SizedBox(width: 10),
-                          Text(
-                            'Add Flash Card',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                   MyDivider(),
                   Container(
                     child: Text(
@@ -202,16 +152,14 @@ class _FolderMainScreenState extends State<FolderMainScreen> {
                     alignment: Alignment.centerLeft,
                   ),
                   SizedBox(height: 10),
-                  !cardsList.isEmpty
+                  !args.folderContent.isEmpty
                       ? Column(
-                          children: cardsList
+                          children: args.folderContent
                               .map((e) => DynamicCardWidget(
-                                    flashModel: FlashModel(back: e['Answer'], front: e['Question'], isKnown: false),
-                                    listName: folderName,
-                                    indexOfCard: cardsList.indexOf(e),
-                                    isDoubled: false,
-                                    docId: args.docId,
-                                    existingCards: cardsList,
+                                    flashModel: FlashModel(back: e.back, front: e.front, isKnown: e.isKnown),
+                                    existingCards: args.folderContent
+                            ,
+                                    folderLocation: FolderLocation.downloaded,
                                   ))
                               .toList(),
                         )
@@ -225,8 +173,6 @@ class _FolderMainScreenState extends State<FolderMainScreen> {
             ),
           ]),
         );
-      }
-    );
   }
 }
 

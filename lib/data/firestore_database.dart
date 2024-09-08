@@ -10,7 +10,7 @@ class FirestoreDatabase {
   final _firestore = FirebaseFirestore.instance;
 
   late final CollectionReference _folderCollectionRef;
-  late final CollectionReference _usersCollectionRed;
+  late final CollectionReference _usersCollectionRef;
 
   FirestoreDatabase() {
     _folderCollectionRef = _firestore.collection(FOLDERS_COLLECTON_REF).withConverter<FolderModel>(
@@ -19,7 +19,7 @@ class FirestoreDatabase {
         ),
         toFirestore: (folderModel, _) => folderModel.toJson());
 
-    _usersCollectionRed = _firestore.collection(USERS_COLLECTION_REF).withConverter<UserModel>(
+    _usersCollectionRef = _firestore.collection(USERS_COLLECTION_REF).withConverter<UserModel>(
         fromFirestore: (snapshots, _) => UserModel.fromJson(
           snapshots.data()!,
         ),
@@ -37,13 +37,13 @@ class FirestoreDatabase {
         .snapshots();
   }
 
-  void createFolder(String folderName) async {
-    FolderModel folderModel = FolderModel(name: folderName, contents: []);
+  void createFolder(String folderName, String ownerId) async {
+    FolderModel folderModel = FolderModel(name: folderName, contents: [], ownerId: ownerId);
     _folderCollectionRef.add(folderModel);
   }
 
-  void addFlashCard(List folderContent, String folderName, String docId) async {
-    FolderModel folderModel= FolderModel(name: folderName, contents: folderContent);
+  void addFlashCard(List folderContent, String folderName, String docId, String ownerId) async {
+    FolderModel folderModel= FolderModel(name: folderName, contents: folderContent, ownerId: ownerId);
     _folderCollectionRef.doc(docId).set(folderModel);
   }
 
@@ -61,7 +61,13 @@ class FirestoreDatabase {
   //User operations
 
   void addUser(String nickName, String userId, String email, UserRoles role) async {
-    UserModel userModel = UserModel(nickName: nickName, userId: userId, email: email, role: role.toString().split('.').last);
-    _usersCollectionRed.add(userModel);
+    UserModel userModel = UserModel(nickName: nickName, userId: userId, email: email, role: role.toString()
+        .split('.').last);
+    _usersCollectionRef.add(userModel);
+  }
+
+  Future<UserModel> getUser(String userId) async {
+    QuerySnapshot userDoc = await _usersCollectionRef.where('userId', isEqualTo: userId).get();
+    return userDoc.docs[0].data() as UserModel;
   }
 }

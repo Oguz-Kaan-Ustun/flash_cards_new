@@ -1,7 +1,9 @@
 import 'package:flash_cards_new/screens/bottom_and_pop_up/new_folder_screen.dart';
 import 'package:flutter/material.dart';
 
-class CreateScreen extends StatelessWidget {
+class CreateNewFolderScreen extends StatelessWidget {
+  CreateNewFolderScreen({required this.ownerId});
+  final String ownerId;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class CreateScreen extends StatelessWidget {
                     builder: (context) => SingleChildScrollView(
                       child:Container(
                         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: NewFolderScreen(parentContext: context),
+                        child: NewFolderScreen(parentContext: context, ownerId: ownerId),
                       ),
                     ),
                   );

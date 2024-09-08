@@ -1,18 +1,56 @@
+import 'package:flash_cards_new/screens/folder_main_screen_downloaded.dart';
 import 'package:flutter/material.dart';
-import 'package:flash_cards_new/models/folder_model.dart';
-import 'package:flash_cards_new/providers/card_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:flash_cards_new/screens/folder_main_screen.dart';
+import 'package:flash_cards_new/screens/folder_main_screen_shop.dart';
+
+enum FolderLocation{downloaded, shop, userFolders}
 
 class FolderWidget extends StatelessWidget {
-  FolderWidget({required this.folderName, required this.docId, required this.cardsList});
+  FolderWidget({
+    required this.folderName,
+    this.docId,
+    required this.folderLocation,
+    this.folderContents,
+    this.ownerId,
+  });
 
   final String folderName;
-  final String docId;
-  final List cardsList;
+  final String? docId;
+  final FolderLocation folderLocation;
+  List? folderContents;
+  String? ownerId;
 
   @override
   Widget build(BuildContext context) {
+
+    List<Widget> rowOfWidgets = [
+      Icon(Icons.filter_none),
+      SizedBox(width: 15),
+      Text(
+        folderName,
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+    ];
+
+    // if(folderLocation == FolderLocation.shop){
+    //   folderContents = folderContents!.map((e)=>
+    //       FlashModel(back: e['Question'], front: e['Answer'], isKnown: false)
+    //   ).toList();
+    //   rowOfWidgets.add(
+    //     Spacer(),
+    //   );
+    //   rowOfWidgets.add(
+    //     IconButton(
+    //       icon: Icon(Icons.download),
+    //       onPressed: (){
+    //         _cardsDataBase.updateDataBase(folderName, folderContents!);
+    //       },
+    //     ),
+    //   );
+    // }
 
     return Column(
       children: [
@@ -23,37 +61,34 @@ class FolderWidget extends StatelessWidget {
               child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
-                      WidgetStateProperty.all(Colors.lightBlue[50]),
+                  WidgetStateProperty.all(Colors.lightBlue[50]),
                   iconColor: WidgetStateProperty.all(Colors.black),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    FolderMainScreen.id,
-                    arguments: ScreenArguments(docId: docId)
-                  );
+                  if(folderLocation == FolderLocation.downloaded){
+                    Navigator.pushNamed(
+                        context,
+                        FolderMainScreenDownloaded.id,
+                        arguments: ScreenArgumentsDownloaded(folderName: folderName, folderContent: folderContents!)
+                    );
+                  } else if(folderLocation == FolderLocation.shop){
+                    Navigator.pushNamed(
+                        context,
+                        FolderMainScreenShop.id,
+                        arguments: ScreenArgumentsShop(docId: docId!, ownerId: ownerId!)
+                    );
+                  }
                 },
                 child: Container(
                   height: 60,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(Icons.filter_none),
-                      SizedBox(width: 15),
-                      Text(
-                        folderName,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                    children: rowOfWidgets,
                   ),
                 ),
               ),
             ),
-          ],
+          ]
         ),
         SizedBox(height: 10),
       ],

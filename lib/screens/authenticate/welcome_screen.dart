@@ -98,19 +98,19 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         pageBuilder: (_, __, ___) => RegistrationScreen()));
               },
             ),
-            RoundedButton(
-              title: 'Sign In Anon',
-              colour: Colors.blueAccent.shade700,
-              onPressed: () async {
-                dynamic result = await _authService.signInAnon();
-                if (result == null) {
-                  print('error signing in');
-                } else {
-                  print('signed in');
-                  print(result);
-                }
-              }
-            ),
+            // RoundedButton(
+            //   title: 'Sign In Anon',
+            //   colour: Colors.blueAccent.shade700,
+            //   onPressed: () async {
+            //     dynamic result = await _authService.signInAnon();
+            //     if (result == null) {
+            //       print('error signing in');
+            //     } else {
+            //       print('signed in');
+            //       print(result);
+            //     }
+            //   }
+            // ),
           ],
         ),
       ),

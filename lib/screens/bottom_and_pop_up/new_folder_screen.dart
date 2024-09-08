@@ -6,9 +6,10 @@ import 'package:provider/provider.dart';
 
 class NewFolderScreen extends StatefulWidget {
 
-  NewFolderScreen({required this.parentContext});
+  NewFolderScreen({required this.parentContext, required this.ownerId});
 
   final BuildContext parentContext;
+  final String ownerId;
 
   @override
   State<NewFolderScreen> createState() => _NewFolderScreenState();
@@ -38,7 +39,7 @@ class _NewFolderScreenState extends State<NewFolderScreen> {
                 labelText: 'Folder Name',
               ),
               onSubmitted: (String value) {
-                  _firestoreDatabase.createFolder(value);
+                  _firestoreDatabase.createFolder(value, widget.ownerId);
                   Navigator.pop(widget.parentContext);
                   Navigator.pop(context);
               },

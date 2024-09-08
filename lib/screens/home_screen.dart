@@ -1,10 +1,6 @@
 import 'package:flash_cards_new/data/firestore_database.dart';
 import 'package:flash_cards_new/widgets/folder_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flash_cards_new/models/folder_model.dart';
-import 'package:flash_cards_new/data/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -16,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-
     final FirestoreDatabase _firestoreDatabase = FirestoreDatabase();
 
     return Scaffold(
@@ -38,9 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
               return ListView(
                   children: folders
                       .map((e) => FolderWidget(
+                          folderLocation: FolderLocation.shop,
                           folderName: e.data().name,
                           docId: e.id,
-                          cardsList: e.data().contents))
+                          ownerId: e.data().ownerId,))
                       .toList());
             }),
       ),

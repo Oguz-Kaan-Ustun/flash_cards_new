@@ -1,3 +1,6 @@
+import 'package:flash_cards_new/data/database.dart';
+import 'package:flash_cards_new/models/user_model.dart';
+import 'package:flash_cards_new/screens/authenticate/registration_screen.dart';
 import 'package:flash_cards_new/screens/library_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_cards_new/screens/home_screen.dart';
@@ -5,7 +8,9 @@ import 'package:flash_cards_new/screens/profile_screen.dart';
 import 'package:flash_cards_new/screens/bottom_and_pop_up/create_new_folder_bottom_sheet.dart';
 
 class BuildNavBar extends StatefulWidget {
-  const BuildNavBar({super.key});
+  BuildNavBar({super.key, required this.userModel});
+
+  final UserModel userModel;
 
   @override
   State<BuildNavBar> createState() => _BuildNavBarState();
@@ -13,6 +18,13 @@ class BuildNavBar extends StatefulWidget {
 
 class _BuildNavBarState extends State<BuildNavBar> {
   int currentIndex = 0;
+  late UserModel userModel;
+
+  @override
+  void initState() {
+    super.initState();
+    userModel = widget.userModel;
+  }
 
   void _onItemTapped(int index) {
     if (index > -1) {
@@ -22,14 +34,15 @@ class _BuildNavBarState extends State<BuildNavBar> {
     }
   }
 
-  final screens = [
+  late final screens = [
     HomeScreen(),
-    LibraryScreen(),
-    ProfileScreen(),
+    LibraryScreen(userModel: userModel),
+    ProfileScreen(userModel: userModel),
   ];
 
   @override
   Widget build(BuildContext context) {
+    CardsDataBase();//to reload the database
     return Scaffold(
       body: screens[currentIndex],
       bottomNavigationBar: NavigationBar(
@@ -58,31 +71,4 @@ class _BuildNavBarState extends State<BuildNavBar> {
   }
 }
 
-//floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-// floatingActionButton: FloatingActionButton(
-//   backgroundColor: Colors.white,
-//   onPressed: () {
-//     showModalBottomSheet(
-//       showDragHandle: true,
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(
-//           top: Radius.circular(20.0),
-//         ),
-//       ),
-//       backgroundColor: Colors.white,
-//       context: context,
-//       builder: (context) => SingleChildScrollView(
-//         child: Container(
-//           padding: EdgeInsets.only(
-//               bottom: MediaQuery.of(context).viewInsets.bottom),
-//           child: CreateScreen(),
-//         ),
-//       ),
-//     );
-//   },
-//   child: Icon(
-//     Icons.add,
-//     color: Colors.black,
-//   ),
-//   elevation: 10.0,
-// ),
+

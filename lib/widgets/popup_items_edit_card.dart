@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 import '../screens/bottom_and_pop_up/add_flash_card_screen.dart';
 
 class PopupItemsEditCard extends StatelessWidget {
-  PopupItemsEditCard({required this.listName, required this.indexOfCard, required this.docId, required this.existingCards});
+  PopupItemsEditCard({
+    required this.listName,
+    required this.indexOfCard,
+    required this.docId,
+    required this.existingCards,
+    required this.ownerId,
+  });
   final String listName;
   final int indexOfCard;
   final String docId;
   final List existingCards;
+  final String ownerId;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +59,7 @@ class PopupItemsEditCard extends StatelessWidget {
                     question: existingCards[indexOfCard]['Question'],
                     answer: existingCards[indexOfCard]['Answer'],
                     indexOfCard: indexOfCard,
+                    ownerId: ownerId,
                   ),
                 ),
               ),
