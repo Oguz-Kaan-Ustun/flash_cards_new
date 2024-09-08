@@ -1,3 +1,4 @@
+
 import 'package:hive/hive.dart';
 
 part 'flash_card_model.g.dart';

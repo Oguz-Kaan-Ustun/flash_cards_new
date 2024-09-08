@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_cards_new/data/firestore_database.dart';
 import 'package:flash_cards_new/screens/authenticate/registration_screen.dart';
