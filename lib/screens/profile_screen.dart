@@ -26,7 +26,7 @@ class ProfileScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             onPressed: () async {
-              await _auth.signOut();
+              await _auth.signOut(context);
             },
             icon: Icon(Icons.logout_outlined),
           ),

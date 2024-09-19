@@ -1,12 +1,17 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flash_cards_new/data/firestore_database.dart';
+import 'package:flash_cards_new/data/database.dart';
+import 'package:flash_cards_new/providers/disposable_provider.dart';
+import 'package:flash_cards_new/services/firestore_database.dart';
 import 'package:flash_cards_new/screens/authenticate/registration_screen.dart';
 import 'package:flash_cards_new/utilities/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
+import '../providers/app_providers.dart';
 
 class AuthService {
 
@@ -31,13 +36,15 @@ class AuthService {
   }
 
 // sign in with email and password
-  Future signInWithEmailAndPassword(String email, String password) async {
+  Future signInWithEmailAndPassword(String email, String password, BuildContext buildContext) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
       prefs!.setString(AppConstants.kBoxPreferenceKey, user!.uid);
+      String boxName = prefs!.getString(AppConstants.kBoxPreferenceKey)!;
       print('opening ${user.uid}');
       await Hive.openBox(user.uid);
+      if(buildContext.mounted) AppProviders.updateHiveBoxName(boxName, buildContext);
       return user;
     } catch (error) {
       print(error.toString());
@@ -61,7 +68,8 @@ class AuthService {
   }
 
 // sign out
-  Future signOut() async {
+  Future signOut(BuildContext buildContext) async {
+    AppProviders.disposeAllDisposableProviders(buildContext);
     prefs!.remove(AppConstants.kBoxPreferenceKey);
     await Hive.close();
     print('hive boxes closed');

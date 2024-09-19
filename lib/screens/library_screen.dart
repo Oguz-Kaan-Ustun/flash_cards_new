@@ -2,8 +2,11 @@ import 'package:flash_cards_new/data/database.dart';
 import 'package:flash_cards_new/models/user_model.dart';
 import 'package:flash_cards_new/widgets/folder_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
+import '../main.dart';
+import '../utilities/constants.dart';
 import 'bottom_and_pop_up/create_new_folder_bottom_sheet.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -15,18 +18,25 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
+
+
   @override
   Widget build(BuildContext context) {
-    CardsDataBase cardsDataBase = CardsDataBase();
     final provider = Provider.of<CardsDataBase>(context);
-    print(cardsDataBase.myBox.name);
+
+    Iterable listOfKeysFromBox = provider.myBox!.keys;
+    print(listOfKeysFromBox);
+
+    List<FolderWidget> folderWidgetsList = provider.myBox!.keys.map((e)=>
+      FolderWidget(folderName: e, folderLocation: FolderLocation.downloaded, folderContents: provider.myBox!.get(e))
+    ).toList();
 
     List<StatelessWidget> listForDownloadedColumn = [
       const Text('Downloaded Folders',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
       const MyDivider(),
     ];
-    listForDownloadedColumn.addAll(provider.listOfDownloadedFolders);
+    listForDownloadedColumn.addAll(folderWidgetsList);
 
     return Scaffold(
       backgroundColor: Colors.grey[200],

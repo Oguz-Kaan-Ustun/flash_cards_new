@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       showSpinner = true;
                     });
-                    dynamic result = await _authService.signInWithEmailAndPassword(email, password);
+                    dynamic result = await _authService.signInWithEmailAndPassword(email, password, context);
                     if(result == null) {
                       setState(() {
                         showSpinner = false;

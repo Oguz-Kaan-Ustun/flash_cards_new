@@ -1,4 +1,4 @@
-import 'package:flash_cards_new/data/firestore_database.dart';
+import 'package:flash_cards_new/services/firestore_database.dart';
 import 'package:flash_cards_new/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

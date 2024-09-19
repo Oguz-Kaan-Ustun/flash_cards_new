@@ -1,5 +1,5 @@
 import 'package:flash_cards_new/data/database.dart';
-import 'package:flash_cards_new/data/firestore_database.dart';
+import 'package:flash_cards_new/services/firestore_database.dart';
 import 'package:flash_cards_new/models/flash_card_model.dart';
 import 'package:flash_cards_new/screens/flash_card_learning_screen.dart';
 import 'package:flash_cards_new/utilities/constants.dart';

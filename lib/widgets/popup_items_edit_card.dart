@@ -1,4 +1,4 @@
-import 'package:flash_cards_new/data/firestore_database.dart';
+import 'package:flash_cards_new/services/firestore_database.dart';
 import 'package:flutter/material.dart';
 import '../screens/bottom_and_pop_up/add_flash_card_screen.dart';
 

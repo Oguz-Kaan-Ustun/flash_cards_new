@@ -42,7 +42,7 @@ class _BuildNavBarState extends State<BuildNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    CardsDataBase();//to reload the database
+    //CardsDataBase();//to reload the database
     return Scaffold(
       body: screens[currentIndex],
       bottomNavigationBar: NavigationBar(
